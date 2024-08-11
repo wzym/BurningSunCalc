@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Telegram.Bot" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BurningSunCalc.AstroCalc\BurningSunCalc.AstroCalc.csproj" />
+    <ProjectReference Include="..\BurningSunCalc.Interfaces\BurningSunCalc.Interfaces.csproj" />
+    <ProjectReference Include="..\BurningSunCalc.Types\BurningSunCalc.Types.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+  	<Content Include="$(SolutionDir)appsettings.json">
+  		<Link>appsettings.json</Link>
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  	</Content>
+  	<Content Include="$(SolutionDir)appsettings.Development.json" Condition="Exists('$(SolutionDir)appsettings.Development.json')" >
+  		<Link>appsettings.Development.json</Link>
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<DependentUpon>appsettings.json</DependentUpon>
+	</Content>
+  </ItemGroup>
+</Project>
