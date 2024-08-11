@@ -1,13 +1,21 @@
-﻿using Telegram.Bot;
+﻿using BurningSunCalc.TelegramBot;
+using Microsoft.Extensions.Configuration;
+using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 
-var botClient = new TelegramBotClient("");
+var appConfiguration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.Development.json", optional: true, reloadOnChange: true)
+    .Build();
+var secrets = new BurningSunCalcSecrets { TelegramBotSecretToken = appConfiguration["TelegramBotSecretToken"] };
+
+var botClient = new TelegramBotClient(secrets.TelegramBotSecretToken);
 
 botClient.StartReceiving(
     HandleUpdateAsync,
     HandleErrorAsync,
-    new ReceiverOptions()
+    new ReceiverOptions { }
 );
 
 async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
@@ -24,14 +32,12 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
     await botClient.SendTextMessageAsync(
         chatId: chatId,
         text: "Вы сказали:\n" + messageText,
-        cancellationToken: cancellationToken)
-        .ConfigureAwait(ConfigureAwaitOptions.None);
+        cancellationToken: cancellationToken);
 }
 
-Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
+async Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
 {
     Console.WriteLine(exception.ToString());
-    return Task.CompletedTask;
 }
 
 Console.ReadLine();

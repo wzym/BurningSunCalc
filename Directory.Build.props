@@ -1,7 +1,6 @@
 ﻿<Project>
-	
+
 	<PropertyGroup Label="Build">
-		<AnalysisMode>All</AnalysisMode>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
