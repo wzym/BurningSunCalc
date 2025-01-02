@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <PublishAot>true</PublishAot>
+    <PublishAot>false</PublishAot>
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
@@ -10,10 +10,14 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
     <PackageReference Include="Telegram.Bot" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BurningSunCalc.AstroCalc\BurningSunCalc.AstroCalc.csproj" />
     <ProjectReference Include="..\BurningSunCalc.Interfaces\BurningSunCalc.Interfaces.csproj" />
     <ProjectReference Include="..\BurningSunCalc.Logic\BurningSunCalc.Logic.csproj" />
     <ProjectReference Include="..\BurningSunCalc.Types\BurningSunCalc.Types.csproj" />
@@ -26,7 +30,7 @@
 	</Content>
 	<Content Include="$(SolutionDir)appsettings.Development.json" Condition="Exists('$(SolutionDir)appsettings.Development.json')">
 	  <Link>appsettings.Development.json</Link>
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  <DependentUpon>appsettings.json</DependentUpon>
 	</Content>	
   </ItemGroup>

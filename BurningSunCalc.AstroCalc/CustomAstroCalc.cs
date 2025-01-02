@@ -12,10 +12,10 @@ public class CustomAstroCalc : IAstroCalc
     private readonly double _latitude;
     private readonly double _longitude;
 
-    public CustomAstroCalc(double latitude, double longitude)
+    public CustomAstroCalc(Coordinates coordinates)
     {
-        _latitude = latitude;
-        _longitude = longitude;
+        _latitude = coordinates.Latitude;
+        _longitude = coordinates.Longitude;
     }
 
     public BurningInterval CalculateLocalTimeBySolarElevation(double solarElevation, DateTime calculatingBurningIntervalDate)
@@ -26,7 +26,7 @@ public class CustomAstroCalc : IAstroCalc
         var declination = GetSunDeclination(calculatingBurningIntervalDate.DayOfYear);
 
         var cosHourAngle = (Math.Sin(elevationRad) - Math.Sin(latRad) * Math.Sin(declination))
-        / (Math.Cos(latRad) * Math.Cos(declination));
+            / (Math.Cos(latRad) * Math.Cos(declination));
 
         if (AchtungTimeDoesNotExist(cosHourAngle)) return new BurningInterval(DateOnly.FromDateTime(calculatingBurningIntervalDate));
 
