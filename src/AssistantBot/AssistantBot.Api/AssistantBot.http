@@ -1,0 +1,6 @@
+@AssistantBot_HostAddress = http://localhost:5190
+
+GET {{AssistantBot_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

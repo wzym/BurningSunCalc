@@ -1,0 +1,8 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BurningSunCalc.Types\BurningSunCalc.Types.csproj" />
+    <ProjectReference Include="..\AssistantBot.Types\AssistantBot.Types.csproj" />
+  </ItemGroup>
+
+</Project>
