@@ -1,3 +1,4 @@
+using AssistantBot.Api.AspHelpers;
 using AssistantBot.AspHelpers;
 using AssistantBot.Interfaces;
 using AssistantBot.Logic;
@@ -30,25 +31,16 @@ builder.Services
     .AddSingleton<IChatSettingsStore, ChatSettingsStore>()
     .AddSingleton<ICommandsDispatcher, CommandsDispatcher>()
     .ConfigureTelegramBotMvc()            
-    .AddSerilog(s => s.WriteTo.Console())            
+    .AddSerilog(s => s.WriteTo.Console().MinimumLevel.Debug())
     .AddHttpClient("tgwebhook").RemoveAllLoggers()            
     .AddTypedClient<ITelegramBotClient>(httpClient =>            
         new TelegramBotClient(botConfigSection.Get<BotConfiguration>()!.BotToken, httpClient))
     .AddStandardResilienceHandler();
+builder.Services.AddHostedService<InitService>();
 #endregion
 var app = builder.Build();
-
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
-logger.LogDebug("The app has been built, start web hook connection");
-#region Extract to an init entity
-var webHookConnector = app.Services.GetRequiredService<ITgBotWebHookConnector>();
-await webHookConnector.SetWebHook();
-var commandsDispatcher = app.Services.GetRequiredService<ICommandsDispatcher>();
-var registeredCommands = commandsDispatcher.RegisteredCommands;
-var tgClient = app.Services.GetRequiredService<ITgBotClient>();
-await tgClient.SetCommands(registeredCommands);
-#endregion
-logger.LogDebug("The web hook has been established");        
+logger.LogDebug("The app has been built");
 #region Middlewares        
 app.UseHttpsRedirection()        
     .UseMiddleware<UpdateRequestAuthMiddleware>()        
