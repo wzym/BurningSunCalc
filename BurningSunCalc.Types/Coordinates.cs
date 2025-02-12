@@ -2,7 +2,7 @@
 
 public readonly record struct Coordinates
 {
-    public double Longitude { get; init; }
+    public required double Longitude { get; init; }
 
-    public double Latitude { get; init; }
+    public required double Latitude { get; init; }
 }
