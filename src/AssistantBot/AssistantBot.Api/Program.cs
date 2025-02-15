@@ -30,6 +30,7 @@ builder.Services
     .AddSingleton<IStateManager, StateManager>()
     .AddSingleton<IChatSettingsStore, ChatSettingsStore>()
     .AddSingleton<ICommandsDispatcher, CommandsDispatcher>()
+    .AddSingleton<PowerSensitivitySettingsManager>()
     .ConfigureTelegramBotMvc()            
     .AddSerilog(s => s.WriteTo.Console().MinimumLevel.Debug())
     .AddHttpClient("tgwebhook").RemoveAllLoggers()            

@@ -5,10 +5,6 @@ namespace BurningSunCalc.AstroCalc;
 
 public class CustomAstroCalc : IAstroCalc
 {
-    private const double SolsticeDeclinationDegrees = 23.44;
-    private const double EclipticSunDailyAngleChangeRads = 2 * Math.PI / 365;
-    private const int YearDaysBeforTheVernalEquinox = 81;
-
     private readonly double _latitude;
     private readonly double _longitude;
 
@@ -57,7 +53,7 @@ public class CustomAstroCalc : IAstroCalc
 
     public double GetSunDeclination(int dayOfYear)
     {
-        var resultDegrees = SolsticeDeclinationDegrees * GetSunDelinationKoefficient(dayOfYear);
+        var resultDegrees = AstroConstants.SolsticeDeclinationDegrees * GetSunDelinationKoefficient(dayOfYear);
         return resultDegrees.ToRadians();
     }
 
@@ -71,9 +67,9 @@ public class CustomAstroCalc : IAstroCalc
         => Math.Sin(GetEclipticSunYearAngleRads(dayOfYear));
 
     private static double GetEclipticSunYearAngleRads(int dayOfYear)
-        => EclipticSunDailyAngleChangeRads * DaysSincetheVernalEquinox(dayOfYear);
+        => AstroConstants.EclipticSunDailyAngleChangeRads * DaysSincetheVernalEquinox(dayOfYear);
 
-    private static int DaysSincetheVernalEquinox(int dayOfYear) => dayOfYear - YearDaysBeforTheVernalEquinox;
+    private static int DaysSincetheVernalEquinox(int dayOfYear) => dayOfYear - AstroConstants.YearDaysBeforTheVernalEquinox;
 
     private DateTime ConvertSolarTimeToLocalTime(double solarTime, DateTime date)
     {

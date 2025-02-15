@@ -26,7 +26,7 @@ public class BurningSunCalcFlowTests
     }
 
     [Fact]
-    public async Task T1()
+    public async Task ProcessesFullBurningSunFlowCorrectly()
     {
         using var factory = new CustomWebAppliucationFactory<Program>()
             .WithWebHostBuilder(b => b.ConfigureTestServices(s =>
@@ -41,7 +41,6 @@ public class BurningSunCalcFlowTests
         httpClient.DefaultRequestHeaders.Add(Constants.TelegramBotSecretKeyHeader, _secretTokenProviderMock.SecretTokenRnd);
 
         var responseMessage = await httpClient.PostAsync("/bot/update", new StringContent(GetNewStringUpdate("/in_days")));
-        await _tgBotClient.Received(1).RequestCoordinates(Arg.Is<long>(ci => ci == _chatId), Arg.Any<string>());
         Assert.Equal(HttpStatusCode.OK, responseMessage.StatusCode);
 
         responseMessage = await httpClient.PostAsync("/bot/update", 
@@ -50,8 +49,10 @@ public class BurningSunCalcFlowTests
                 Latitude = 3,
                 Longitude = 4
             })));
-        await _tgBotClient.Received(1).SendTextMessageAsync(Arg.Is<long>(ci => ci == _chatId), Arg.Any<string>());
         Assert.Equal(HttpStatusCode.OK, responseMessage.StatusCode);
+        
+        await _tgBotClient.Received(1).RequestCoordinates(Arg.Is<long>(ci => ci == _chatId), Arg.Any<string>());
+        await _tgBotClient.Received(1).SendTextMessageAsync(Arg.Is<long>(ci => ci == _chatId), Arg.Any<string>());
     }
 
     private string GetNewStringUpdate(string updateMessage)

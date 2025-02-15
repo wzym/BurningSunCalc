@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BurningSunCalc.Types\BurningSunCalc.Types.csproj" />
+    <ProjectReference Include="..\..\AstroCalc\BurningSunCalc.Types\BurningSunCalc.Types.csproj" />
   </ItemGroup>
 </Project>

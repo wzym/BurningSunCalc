@@ -7,5 +7,6 @@ public enum AssistantBotCommand : byte
     DaysRange,
     InDaysRange,
     SetCoordinates,
-    SmthElse
+    SmthElse,
+    SetupSunAngle
 }

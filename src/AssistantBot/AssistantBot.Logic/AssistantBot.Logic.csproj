@@ -6,7 +6,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BurningSunCalc.AstroCalc\BurningSunCalc.AstroCalc.csproj" />
+    <ProjectReference Include="..\..\AstroCalc\BurningSunCalc.AstroCalc\BurningSunCalc.AstroCalc.csproj" />
     <ProjectReference Include="..\AssistantBot.Interfaces\AssistantBot.Interfaces.csproj" />
   </ItemGroup>
 

@@ -11,13 +11,12 @@ public class CommandsDispatcher : ICommandsDispatcher
     
     private static readonly FrozenDictionary<string, AssistantBotCommand> InnerCommandsStorage = GetCommands();
 
-    public IReadOnlyCollection<CommandModel> RegisteredCommands => InnerCommandsStorage
+    public IReadOnlyCollection<CommandModel> RegisteredCommands => [.. InnerCommandsStorage
         .Select(e => new CommandModel
         {
             CommandString = e.Key,
             Description = GetDescription(e.Value)
-        })
-        .ToArray();
+        })];
 
     public AssistantBotCommand Parse(string commandString)
     {
@@ -34,7 +33,8 @@ public class CommandsDispatcher : ICommandsDispatcher
             AssistantBotCommand.InDays => "Burning time in a few days",     
             AssistantBotCommand.DaysRange => "Burning time for the interval of days",     
             AssistantBotCommand.InDaysRange => "Burning time for an interval of days beginning in the specified number of days",     
-            AssistantBotCommand.SetCoordinates => "Set coordinates for user",     
+            AssistantBotCommand.SetCoordinates => "Set coordinates for user",
+            AssistantBotCommand.SetupSunAngle => "Set sensitivity for the burning sun calculating",
             AssistantBotCommand.SmthElse => "another request example",     
             _ => throw new ArgumentOutOfRangeException(nameof(command), command, null)
         };
