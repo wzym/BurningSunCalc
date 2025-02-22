@@ -1,5 +1,9 @@
 ﻿using AssistantBot.Interfaces;
+using AssistantBot.Logic.StateMachine;
 using AssistantBot.Logic.StateMachine.BurningSunStates;
+using AssistantBot.Logic.StateMachine.Divination.SuffMiddleAge;
+using AssistantBot.Logic.StateMachine.OtherStates;
+using AssistantBot.Logic.StateMachine.SettingsStates;
 using AssistantBot.Types;
 using Microsoft.Extensions.Logging;
 
@@ -24,22 +28,35 @@ public class TgUpdateHandler : ITgUpdateHandler
         if (!updateModel.IsCommand)
         {
             var currentState = _stateManager.Get(updateModel.ChatId);
+            if (currentState is null)
+            {
+                _logger.LogWarning("Unable to find a required stored state");
+                currentState = new DefaultState();
+            }
+
             await currentState.Handle(_stateDependenciesResolver, updateModel);
             return;
         }
 
-        var state = updateModel.Command switch
+        IState state = updateModel.Command switch
         {
-            AssistantBotCommand.Today 
-            or AssistantBotCommand.InDays 
-            or AssistantBotCommand.DaysRange 
+            AssistantBotCommand.Today
+            or AssistantBotCommand.InDays
+            or AssistantBotCommand.DaysRange
             or AssistantBotCommand.InDaysRange => new BurningSunStartState(),
-            AssistantBotCommand.SetCoordinates => throw new NotImplementedException(),
-            AssistantBotCommand.SmthElse => throw new NotImplementedException(),
-            null => throw new NotImplementedException(),
-            _ => throw new NotImplementedException(),
+            AssistantBotCommand.SetCoordinates => new NewCoordinatesSetupRequested(),
+            AssistantBotCommand.SmthElse => new SmthElseState(),
+            AssistantBotCommand.SetupSunAngle => new SunAngleChangeRequestedState(),
+            AssistantBotCommand.GetSufferingPrediction => new DivinationRequestedState(),
+            _ => GetStateForUnintendedCmd(updateModel.Command),
         };
 
         await state.Handle(_stateDependenciesResolver, updateModel);
+    }
+
+    private DefaultState GetStateForUnintendedCmd(AssistantBotCommand? command)
+    {
+        _logger.LogError("Received {UnintendedCommand}", command);
+        return new DefaultState();
     }
 }

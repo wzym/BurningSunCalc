@@ -4,11 +4,19 @@ namespace AssistantBot.Logic.Services;
 
 public class StateManager : IStateManager
 {
-    private readonly Dictionary<long, IState> _innerStorage = new();
+    private readonly Dictionary<long, IState> _innerStorage = [];
 
-    public IState Get(long chatId)
+    public StateManager()
     {
-        return _innerStorage[chatId];
+
+    }
+
+    public IState? Get(long chatId)
+    {
+        if (_innerStorage.TryGetValue(chatId, out var result))
+            return result;
+
+        return null;
     }
 
     public void Set(long chatId, IState newState)

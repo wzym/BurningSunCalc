@@ -15,4 +15,6 @@ public class UpdateModel
     public required string Text { get; init; }
 
     public Coordinates? Coordinates { get; init; }
+
+    public CallbackQueryModel? CallbackQuery { get; init; }
 }

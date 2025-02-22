@@ -8,5 +8,6 @@ public enum AssistantBotCommand : byte
     InDaysRange,
     SetCoordinates,
     SmthElse,
-    SetupSunAngle
+    SetupSunAngle,
+    GetSufferingPrediction
 }

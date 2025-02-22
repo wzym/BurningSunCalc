@@ -52,6 +52,8 @@ public abstract class BurningSunCalcBaseState : IState
 
 public class BurningSunCalcDependencies : IStateDependencies
 {
+    public static string DependencyKey => nameof(BurningSunCalcBaseState);
+    
     public ITgBotClient TgBotClient { get; }
     public IStateManager StateManager { get; }
     public IBurningSunResponseGenerator BurningSunResponseGenerator { get; }

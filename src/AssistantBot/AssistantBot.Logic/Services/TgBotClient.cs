@@ -55,4 +55,10 @@ public class TgBotClient : ITgBotClient
 
         return _telegramBotClient.SetMyCommands(tgbCommands);
     }
+
+    public Task SendButtons(long chatId, string text, IReadOnlyCollection<string> buttonTexts)
+    {
+        var buttonsGenerated = buttonTexts.Select(t => InlineKeyboardButton.WithCallbackData(t, t)).ToArray();
+        return _telegramBotClient.SendMessage(chatId: chatId, text: text, replyMarkup: buttonsGenerated);
+    }
 }

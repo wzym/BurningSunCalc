@@ -9,4 +9,5 @@ public interface ITgBotClient
     Task RequestCoordinates(long chatId, string message);
     Task SendCoordinatesWereReceived(long chatId, string message);
     Task SetCommands(IReadOnlyCollection<CommandModel> commands);
+    Task SendButtons(long chatId, string text, IReadOnlyCollection<string> buttonTexts);
 }

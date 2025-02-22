@@ -1,25 +1,12 @@
-﻿using AssistantBot.Types;
-using BurningSunCalc.AstroCalc;
-using System.Collections.Frozen;
+﻿using BurningSunCalc.AstroCalc;
 
 namespace AssistantBot.Logic.Services;
 
-public class PowerSensitivitySettingsManager
+public static class PowerSensitivitySettingsManager
 {
-    private static readonly FrozenDictionary<SunPowerSensitivity, byte> _sunDegreesInnerStorage =
-        Enum.GetValues<SunPowerSensitivity>()
-        .Order()
-        .ToDictionary(s => s, s => LocalCalculatingExtensions.CalculateSunAngleDegreesFor(MapToSensitivityDegree(s)))
-        .ToFrozenDictionary();
+    private static readonly byte[] AvailablePowersPercent = [60, 70, 80];
+    
+    public static IReadOnlyCollection<byte> GetAvailablePowersInPrecent => AvailablePowersPercent;
 
-    public double GetAngle(SunPowerSensitivity sunPowerSensitivity) => _sunDegreesInnerStorage[sunPowerSensitivity];
-
-    private static int MapToSensitivityDegree(SunPowerSensitivity sunPowerSteps) =>
-        sunPowerSteps switch
-        {
-            SunPowerSensitivity.Sensitive => 60,
-            SunPowerSensitivity.Neutral => 70,
-            SunPowerSensitivity.ToBeBurnt => 80,
-            _ => throw new Exception(),
-        };
+    public static byte GetAngleBy(byte sunPower) => LocalCalculatingExtensions.CalculateSunAngleDegreesFor(sunPower);
 }

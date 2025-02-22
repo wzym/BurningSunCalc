@@ -10,4 +10,12 @@
     <ProjectReference Include="..\AssistantBot.Interfaces\AssistantBot.Interfaces.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+	  <ContentWithTargetPath Include="StateMachine\Divination\SuffMiddleAge\predictions_set_1.txt">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <TargetPath>predictions_set_1.txt</TargetPath>
+	  </ContentWithTargetPath>
+	  <None Include="StateMachine\Divination\SuffMiddleAge\predictions_set_1.txt" />
+  </ItemGroup>
+
 </Project>

@@ -2,6 +2,7 @@
 using System.Text;
 using AssistantBot.Interfaces;
 using AssistantBot.Types;
+using Microsoft.Extensions.Logging;
 
 namespace AssistantBot.Logic.Services;
 
@@ -10,6 +11,8 @@ public class CommandsDispatcher : ICommandsDispatcher
     private const char CommandSeparator = '_';
     
     private static readonly FrozenDictionary<string, AssistantBotCommand> InnerCommandsStorage = GetCommands();
+    
+    private readonly ILogger<CommandsDispatcher> _logger;
 
     public IReadOnlyCollection<CommandModel> RegisteredCommands => [.. InnerCommandsStorage
         .Select(e => new CommandModel
@@ -18,10 +21,18 @@ public class CommandsDispatcher : ICommandsDispatcher
             Description = GetDescription(e.Value)
         })];
 
+    public CommandsDispatcher(ILogger<CommandsDispatcher> logger)
+    {
+        _logger = logger;
+    }
+
     public AssistantBotCommand Parse(string commandString)
     {
         if (!InnerCommandsStorage.TryGetValue(commandString, out var enumResult))
+        {
+            _logger.LogWarning("Requested a not parsable command {CommandString}", commandString);
             throw new ArgumentException($"Unable to find the command '{commandString}'");
+        }
 
         return enumResult;
     }
@@ -35,7 +46,8 @@ public class CommandsDispatcher : ICommandsDispatcher
             AssistantBotCommand.InDaysRange => "Burning time for an interval of days beginning in the specified number of days",     
             AssistantBotCommand.SetCoordinates => "Set coordinates for user",
             AssistantBotCommand.SetupSunAngle => "Set sensitivity for the burning sun calculating",
-            AssistantBotCommand.SmthElse => "another request example",     
+            AssistantBotCommand.SmthElse => "another request example",
+            AssistantBotCommand.GetSufferingPrediction => "Returns a prediction by suffering middleage calendar",
             _ => throw new ArgumentOutOfRangeException(nameof(command), command, null)
         };
     

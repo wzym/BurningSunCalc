@@ -12,8 +12,9 @@ public class StateDependenciesResolver : IStateDependenciesResolver
         _serviceProvider = serviceProvider;
     }
 
-    public TDependencies Get<TDependencies>() where TDependencies : IStateDependencies
+    public TDependencies Get<TDependencies>() where TDependencies : IStateDependencies 
     {
-        return _serviceProvider.GetRequiredService<TDependencies>();
+        return _serviceProvider.GetKeyedService<TDependencies>(TDependencies.DependencyKey)
+            ?? throw new Exception(); // TODO: replace with an own exception
     }
 }

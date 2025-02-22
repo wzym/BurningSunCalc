@@ -1,11 +1,11 @@
 ﻿using AssistantBot.Interfaces;
 using AssistantBot.Types;
+using AssistantBot.Types.Dtos;
 using Microsoft.Extensions.Logging;
-using Telegram.Bot.Types;
 
 namespace AssistantBot.Logic.Services;
 
-public class TgBotUpdateParser : GenericUpdateMessageParser<Update>
+public class TgBotUpdateParser : GenericUpdateMessageParser<UpdateDto>
 {
     private readonly ILogger<TgBotUpdateParser> _logger;
 
@@ -16,11 +16,12 @@ public class TgBotUpdateParser : GenericUpdateMessageParser<Update>
         _logger = logger;
     }
 
-    public override UpdateModel Parse(Update update)
+    public override UpdateModel Parse(UpdateDto update)
     {
         if (update.Message is null)
         {
-            throw new Exception();
+            _logger.LogWarning("An {@UpdateModel} without a message", update);
+            return Parse(update.CallbackQuery);
         }
 
         var extractedCommand = Parse(update.Message.Text);
@@ -34,10 +35,34 @@ public class TgBotUpdateParser : GenericUpdateMessageParser<Update>
             Coordinates = update.Message.Location is not null
             ? new()
             {
-                Latitude = update.Message.Location.Latitude,
-                Longitude = update.Message.Location.Longitude
+                Latitude = update.Message.Location.Value.Latitude,
+                Longitude = update.Message.Location.Value.Longitude
+            }
+            : null,
+            CallbackQuery = update.CallbackQuery is not null
+            ? new CallbackQueryModel()
+            {
+                Data = update.CallbackQuery.Data
             }
             : null
+        };
+    }
+
+    private UpdateModel Parse(CallbackQueryDto? callbackQuery)
+    {
+        if (callbackQuery is null)
+            throw new Exception();
+
+        return new UpdateModel()
+        {
+            ChatId = callbackQuery.Message.Chat.Id,
+            Command = null,
+            Text = string.Empty,
+            IsCommand = false,
+            CallbackQuery = new CallbackQueryModel
+            {
+                Data = callbackQuery.Data
+            }
         };
     }
 }

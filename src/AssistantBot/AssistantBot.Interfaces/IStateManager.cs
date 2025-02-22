@@ -2,6 +2,6 @@
 
 public interface IStateManager
 {
-    IState Get(long chatId);
+    IState? Get(long chatId);
     void Set(long chatId, IState newState);
 }
