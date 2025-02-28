@@ -2,6 +2,6 @@
 
 public interface ISuffMiddleageFortuneTeller
 {
-    string Tell();
+    string Tell(string theQuestion, long senderId);
     Task InitAsync();
 }

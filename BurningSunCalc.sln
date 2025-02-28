@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{FE4C8244-6121-4084-B641-9EF731FB6190}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		allowedUsers.json = allowedUsers.json
 		appsettings.json = appsettings.json
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props

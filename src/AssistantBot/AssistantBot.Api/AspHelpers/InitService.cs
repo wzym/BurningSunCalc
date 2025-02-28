@@ -10,17 +10,20 @@ internal class InitService : IHostedService
     private readonly ICommandsDispatcher _commandsDispatcher;
     private readonly ITgBotClient _tgBotClient;
     private readonly ISuffMiddleageFortuneTeller _suffMiddleageFortuneTeller;
+    private readonly IIdentifierManager _identifierManager;
 
     public InitService(ILogger<InitService> logger, ITgBotWebHookConnector webHookConnector,
         ICommandsDispatcher commandsDispatcher, 
         ITgBotClient tgBotClient,
-        ISuffMiddleageFortuneTeller suffMiddleageFortuneTeller)
+        ISuffMiddleageFortuneTeller suffMiddleageFortuneTeller,
+        IIdentifierManager identifierManager)
     {
         _logger = logger;
         _webHookConnector = webHookConnector;
         _commandsDispatcher = commandsDispatcher;
         _tgBotClient = tgBotClient;
         _suffMiddleageFortuneTeller = suffMiddleageFortuneTeller;
+        _identifierManager = identifierManager;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -28,6 +31,7 @@ internal class InitService : IHostedService
         _logger.LogDebug("The app initialization is being started");
 
         await _suffMiddleageFortuneTeller.InitAsync();
+        await _identifierManager.InitAsync();
 
         var registeredCommands = _commandsDispatcher.RegisteredCommands;
         await _tgBotClient.SetCommands(registeredCommands);

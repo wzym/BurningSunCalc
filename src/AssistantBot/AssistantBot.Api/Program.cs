@@ -8,7 +8,6 @@ using AssistantBot.Logic.StateMachine.BurningSunStates;
 using AssistantBot.Logic.StateMachine.Divination.SuffMiddleAge;
 using AssistantBot.Logic.StateMachine.OtherStates;
 using AssistantBot.Logic.StateMachine.SettingsStates;
-using AssistantBot.Types;
 using AssistantBot.Types.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -28,8 +27,9 @@ builder.Services.AddProblemDetails()
     .AddExceptionHandler<CustomExceptionHandler>();
 
 builder.Services
-    .Configure<BotConfiguration>(botConfigSection)            
-    .AddTransient<UpdateRequestMappingMiddleware>()            
+    .Configure<BotConfiguration>(botConfigSection)
+    .AddScoped<UpdateModelHolder>()
+    .AddTransient<UpdateRequestMappingMiddleware>()
     .AddTransient<UpdateRequestAuthMiddleware>()            
     .AddTransient<IUpdateMessageParser<UpdateDto>, TgBotUpdateParser>()            
     .AddSingleton<ITgBotSecretTokenProvider, TgBotSecretTokenProvider>()            
@@ -47,10 +47,10 @@ builder.Services
     .AddKeyedTransient<NewCoordinatesSetupDependencies>(NewCoordinatesSetupDependencies.DependencyKey)
     .AddKeyedTransient<NewCoordinatesAwaitedDependencies>(NewCoordinatesAwaitedDependencies.DependencyKey)
     .AddKeyedTransient<SmthElseStateDependencies>(SmthElseStateDependencies.DependencyKey)
+    .AddSingleton<IIdentifierManager, IdentifierManager>()
     .AddSingleton<IStateManager, StateManager>()
     .AddSingleton<IChatSettingsStore, ChatSettingsStore>()
     .AddSingleton<ICommandsDispatcher, CommandsDispatcher>()
-    .ConfigureTelegramBotMvc()            
     .AddSerilog(s => s.WriteTo.Console().MinimumLevel.Information()
         .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day))
     .AddHttpClient("tgwebhook").RemoveAllLoggers()            
@@ -58,6 +58,7 @@ builder.Services
         new TelegramBotClient(botConfigSection.Get<BotConfiguration>()!.BotToken, httpClient))
     .AddStandardResilienceHandler();
 builder.Services.AddHostedService<InitService>();
+builder.Services.AddHostedService<RefreshingSecretService>();
 #endregion
 var app = builder.Build();
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
@@ -69,13 +70,13 @@ app.UseExceptionHandler()
     .UseMiddleware<UpdateRequestMappingMiddleware>();        
 #endregion        
 app.MapPost("/bot/update",        
-    async(HttpContext httpContext,
+    async([FromServices] UpdateModelHolder updateModelHolder,
     [FromServices] ITgUpdateHandler tgUpdateHandler) =>        
     {
-        var updateModel = (UpdateModel)httpContext.Items[UpdateRequestMappingMiddleware.UpdateModelItemKey]!;
-        await tgUpdateHandler.Handle(updateModel);        
+        await tgUpdateHandler.Handle(updateModelHolder.UpdateModel);        
         return TypedResults.Ok();        
-    })        
+    })
+    .AddEndpointFilter<SenderFilter>()
     .WithName("PostBotUpdate")        
     .Produces(StatusCodes.Status200OK)        
     .ProducesValidationProblem(StatusCodes.Status400BadRequest);

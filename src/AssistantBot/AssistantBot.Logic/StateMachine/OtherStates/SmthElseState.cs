@@ -11,7 +11,7 @@ public class SmthElseState : IState
     {
         var dependencies = dependenciesResolver.Get<SmthElseStateDependencies>();
 
-        return dependencies.TgBotClient.SendTextMessageAsync(updateModel.ChatId, SmthElseResponses[Random.Shared.Next(SmthElseResponses.Length - 1)]);
+        return dependencies.TgBotClient.SendTextMessageAsync(updateModel.ChatId, SmthElseResponses[Random.Shared.Next(SmthElseResponses.Length)]);
     }
 }
 

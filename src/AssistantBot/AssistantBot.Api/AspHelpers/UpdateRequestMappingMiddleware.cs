@@ -1,4 +1,5 @@
 ﻿using AssistantBot.Interfaces;
+using AssistantBot.Logic.Services;
 using AssistantBot.Types;
 using AssistantBot.Types.Dtos;
 using System.Text.Json;
@@ -12,12 +13,15 @@ public class UpdateRequestMappingMiddleware : IMiddleware
 
     private readonly ILogger<UpdateRequestMappingMiddleware> _logger;
     private readonly IUpdateMessageParser<UpdateDto> _messageParser;
+    private readonly UpdateModelHolder _updateModelHolder;
 
     public UpdateRequestMappingMiddleware(ILogger<UpdateRequestMappingMiddleware> logger,
-        IUpdateMessageParser<UpdateDto> messageParser)
+        IUpdateMessageParser<UpdateDto> messageParser,
+        UpdateModelHolder updateModelHolder)
     {
         _logger = logger;
         _messageParser = messageParser;
+        _updateModelHolder = updateModelHolder;
     }
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -34,7 +38,7 @@ public class UpdateRequestMappingMiddleware : IMiddleware
                 throw new AssistantBotException("Unable to parse an update model");
             }
             var updateModel = _messageParser.Parse(updateReceived);
-            context.Items.Add(UpdateModelItemKey, updateModel);
+            _updateModelHolder.UpdateModel = updateModel;
         }
         catch (Exception e)
         {

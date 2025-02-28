@@ -6,6 +6,8 @@ namespace AssistantBot.Types;
 public class UpdateModel
 {
     public required long ChatId { get; init; }
+    
+    public required long FromId { get; init; }
 
     [MemberNotNullWhen(true, nameof(Command))]
     public required bool IsCommand { get; init; }

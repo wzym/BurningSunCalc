@@ -21,9 +21,11 @@ public class SuffMiddleageFortuneTeller : ISuffMiddleageFortuneTeller
         Predictions = linesReceived;
     }
 
-    public string Tell()
+    public string Tell(string theQuestion, long senderId)
     {
-        var randomIndex = Random.Shared.Next(Predictions.Length - 1);
+        var rnd = new Random(HashCode.Combine(theQuestion, DateTime.UtcNow));
+
+        var randomIndex = rnd.Next(Predictions.Length);
         return Predictions[randomIndex];
     }
 }

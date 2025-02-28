@@ -1,5 +1,6 @@
 ﻿using AssistantBot.Interfaces;
 using AssistantBot.Tests.IntegrationTests.MockHelpers;
+using AssistantBot.Types.Dtos;
 using Bogus;
 using BurningSunCalc.Types;
 using Microsoft.AspNetCore.TestHost;
@@ -7,8 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using System.Net;
 using System.Text.Json;
-using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 using TgBotAbstractions;
 
 namespace IntegrationTests;
@@ -57,16 +56,24 @@ public class BurningSunCalcFlowTests
 
     private string GetNewStringUpdate(string updateMessage)
     {
-        var newUpdate = new Update()
+        var newUpdate = new UpdateDto()
         {
-            Message = new Message()
+            Id = _faker.Random.Int(),
+            Message = new MessageDto()
             {
-                Chat = new Chat()
+                Chat = new ChatDto()
                 {
-                    Id = _chatId,
-                    Type = ChatType.Private
+                    Id = _chatId
                 },
-                Text = updateMessage
+                Text = updateMessage,
+                From = new FromDto()
+                {
+                    Id = 332344563,
+                    IsBot = _faker.Random.Bool(),
+                    FirstName = _faker.Name.FirstName(),
+                    LastName = _faker.Name.LastName(),
+                    Username = _faker.Random.String2(4, 14)
+                }
             }
         };
 
@@ -76,16 +83,24 @@ public class BurningSunCalcFlowTests
 
     private string GetNewCoordinatesUpdate(Coordinates coordinates)
     {
-        var newUpdate = new Update()
+        var newUpdate = new UpdateDto()
         {
-            Message = new Message()
+            Id = _faker.Random.Int(),
+            Message = new MessageDto()
             {
-                Chat = new Chat
+                Chat = new ChatDto()
                 {
-                    Id = _chatId,
-                    Type = ChatType.Private
-                }, 
-                Location = new Location
+                    Id = _chatId
+                },
+                From = new FromDto()
+                {
+                    Id = 332344563,
+                    IsBot = _faker.Random.Bool(),
+                    FirstName = _faker.Name.FirstName(),
+                    LastName = _faker.Name.LastName(),
+                    Username = _faker.Random.String2(4, 14)
+                },
+                Location = new LocationDto()
                 {
                     Latitude = coordinates.Latitude,
                     Longitude = coordinates.Longitude

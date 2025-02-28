@@ -484,3 +484,4 @@ $RECYCLE.BIN/
 *.swp
 /src/AssistantBot/AssistantBot/Properties/launchSettings.json
 /src/AssistantBot/AssistantBot.Api/appsettings.Development.json
+/allowedUsers.json

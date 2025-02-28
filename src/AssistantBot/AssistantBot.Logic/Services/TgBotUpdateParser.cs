@@ -20,7 +20,7 @@ public class TgBotUpdateParser : GenericUpdateMessageParser<UpdateDto>
     {
         if (update.Message is null)
         {
-            _logger.LogWarning("An {@UpdateModel} without a message", update);
+            _logger.LogInformation("An {@UpdateModel} without a message", update);
             return Parse(update.CallbackQuery);
         }
 
@@ -28,7 +28,8 @@ public class TgBotUpdateParser : GenericUpdateMessageParser<UpdateDto>
 
         return new UpdateModel()
         {
-            ChatId = update.Message.Chat.Id,
+            ChatId = update.Message.Chat.Id,            
+            FromId = update.Message.From.Id,
             Command = extractedCommand.Command,
             Text = extractedCommand.Text,
             IsCommand = extractedCommand.IsCommand,
@@ -62,7 +63,8 @@ public class TgBotUpdateParser : GenericUpdateMessageParser<UpdateDto>
             CallbackQuery = new CallbackQueryModel
             {
                 Data = callbackQuery.Data
-            }
+            },
+            FromId = callbackQuery.From.Id
         };
     }
 }

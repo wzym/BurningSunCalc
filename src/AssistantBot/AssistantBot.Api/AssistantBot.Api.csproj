@@ -14,5 +14,12 @@
   <ItemGroup>
     <ProjectReference Include="..\AssistantBot.Logic\AssistantBot.Logic.csproj" />
   </ItemGroup>
+	
+  <ItemGroup>
+    <Content Include="..\..\..\allowedUsers.json">
+      <Link>allowedUsers.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
 </Project>
