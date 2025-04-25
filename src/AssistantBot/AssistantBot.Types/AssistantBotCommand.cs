@@ -9,5 +9,6 @@ public enum AssistantBotCommand : byte
     SetCoordinates,
     SmthElse,
     SetupSunAngle,
-    GetSufferingPrediction
+    GetSufferingPrediction,
+    CalculateTips
 }

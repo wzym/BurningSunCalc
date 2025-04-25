@@ -37,17 +37,18 @@ public class CommandsDispatcher : ICommandsDispatcher
         return enumResult;
     }
 
-    private static string GetDescription(AssistantBotCommand command) => 
-        command switch 
-        {     
-            AssistantBotCommand.Today => "Today burning time",     
-            AssistantBotCommand.InDays => "Burning time in a few days",     
-            AssistantBotCommand.DaysRange => "Burning time for the interval of days",     
-            AssistantBotCommand.InDaysRange => "Burning time for an interval of days beginning in the specified number of days",     
-            AssistantBotCommand.SetCoordinates => "Set coordinates for user",
-            AssistantBotCommand.SetupSunAngle => "Set sensitivity for the burning sun calculating",
+    private static string GetDescription(AssistantBotCommand command) =>
+        command switch
+        {
+            AssistantBotCommand.Today => "Жгучее время на сегодня",
+            AssistantBotCommand.InDays => "Жгучее время дня через несколько дней",
+            AssistantBotCommand.DaysRange => "Жгучее время на несколько дней начиная с сегодня",
+            AssistantBotCommand.InDaysRange => "Жгучее время на несколько дней через несколько дней",
+            AssistantBotCommand.SetCoordinates => "Устанавливает координаты для пользователя",
+            AssistantBotCommand.SetupSunAngle => "Установисть чувствительность на жгучее солнце",
             AssistantBotCommand.SmthElse => "another request example",
-            AssistantBotCommand.GetSufferingPrediction => "Returns a prediction by suffering middleage calendar",
+            AssistantBotCommand.GetSufferingPrediction => "Гадание по календарю Страдающего средневековья",
+            AssistantBotCommand.CalculateTips => "Считает чаевые с разменом",
             _ => throw new ArgumentOutOfRangeException(nameof(command), command, null)
         };
     

@@ -4,6 +4,7 @@ using AssistantBot.Logic.StateMachine.BurningSunStates;
 using AssistantBot.Logic.StateMachine.Divination.SuffMiddleAge;
 using AssistantBot.Logic.StateMachine.OtherStates;
 using AssistantBot.Logic.StateMachine.SettingsStates;
+using AssistantBot.Logic.StateMachine.TipsCalculator;
 using AssistantBot.Types;
 using Microsoft.Extensions.Logging;
 
@@ -48,6 +49,7 @@ public class TgUpdateHandler : ITgUpdateHandler
             AssistantBotCommand.SmthElse => new SmthElseState(),
             AssistantBotCommand.SetupSunAngle => new SunAngleChangeRequestedState(),
             AssistantBotCommand.GetSufferingPrediction => new DivinationRequestedState(),
+            AssistantBotCommand.CalculateTips => new TipsCalcBaseState(),
             _ => GetStateForUnintendedCmd(updateModel.Command),
         };
 

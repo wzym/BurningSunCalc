@@ -15,6 +15,7 @@ internal class NewCoordinatesAwaitedState : IState
             return;
         }
 
+        dependencies.ChatSettingsStore.Get(updateModel.ChatId).Coordinates = updateModel.Coordinates;
         await dependencies.TgBotClient.SendCoordinatesWereReceived(updateModel.ChatId, "Координаты приняты");
     }
 }
@@ -24,9 +25,12 @@ public class NewCoordinatesAwaitedDependencies : IStateDependencies
     public static string DependencyKey => nameof(NewCoordinatesAwaitedDependencies);
 
     public ITgBotClient TgBotClient { get; }
+    public IChatSettingsStore ChatSettingsStore { get; }
 
-    public NewCoordinatesAwaitedDependencies(ITgBotClient tgBotClient)
+    public NewCoordinatesAwaitedDependencies(ITgBotClient tgBotClient,
+        IChatSettingsStore chatSettingsStore)
     {
         TgBotClient = tgBotClient;
+        ChatSettingsStore = chatSettingsStore;
     }
 }

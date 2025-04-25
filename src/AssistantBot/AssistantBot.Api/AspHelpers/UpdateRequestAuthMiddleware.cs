@@ -1,4 +1,5 @@
 ﻿using AssistantBot.Interfaces;
+using System.Reflection.PortableExecutable;
 using TgBotAbstractions;
 
 namespace AssistantBot.AspHelpers;
@@ -19,8 +20,13 @@ internal class UpdateRequestAuthMiddleware : IMiddleware
     {
         if (context.Request.Headers[Constants.TelegramBotSecretKeyHeader] != _tgBotSecretTokenProvider.Get)
         {
-            _logger.LogInformation("An update {@request} with wrong secret token received", context.Request);
-            await TypedResults.Forbid().ExecuteAsync(context);
+            using var reader = new StreamReader(context.Request.Body);
+            var requestBody = await reader.ReadToEndAsync();
+            var headers = context.Request.Headers;
+
+            _logger.LogInformation("An update Request with wrong secret token received: {Body}, {@Headers}",
+                requestBody, context.Request.Headers);
+            await TypedResults.Ok().ExecuteAsync(context);
 
             return;
         }

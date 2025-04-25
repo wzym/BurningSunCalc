@@ -8,6 +8,7 @@ using AssistantBot.Logic.StateMachine.BurningSunStates;
 using AssistantBot.Logic.StateMachine.Divination.SuffMiddleAge;
 using AssistantBot.Logic.StateMachine.OtherStates;
 using AssistantBot.Logic.StateMachine.SettingsStates;
+using AssistantBot.Logic.StateMachine.TipsCalculator;
 using AssistantBot.Types.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -47,18 +48,21 @@ builder.Services
     .AddKeyedTransient<NewCoordinatesSetupDependencies>(NewCoordinatesSetupDependencies.DependencyKey)
     .AddKeyedTransient<NewCoordinatesAwaitedDependencies>(NewCoordinatesAwaitedDependencies.DependencyKey)
     .AddKeyedTransient<SmthElseStateDependencies>(SmthElseStateDependencies.DependencyKey)
+    .AddKeyedTransient<TipsCalcDependencies>(TipsCalcDependencies.DependencyKey)
     .AddSingleton<IIdentifierManager, IdentifierManager>()
     .AddSingleton<IStateManager, StateManager>()
     .AddSingleton<IChatSettingsStore, ChatSettingsStore>()
     .AddSingleton<ICommandsDispatcher, CommandsDispatcher>()
     .AddSerilog(s => s.WriteTo.Console().MinimumLevel.Information()
-        .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day))
-    .AddHttpClient("tgwebhook").RemoveAllLoggers()            
+        .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
+        .Destructure.ToMaximumDepth(6)
+        .Destructure.ToMaximumStringLength(500))
+    .AddHttpClient("tgwebhook").RemoveAllLoggers()
     .AddTypedClient<ITelegramBotClient>(httpClient =>            
         new TelegramBotClient(botConfigSection.Get<BotConfiguration>()!.BotToken, httpClient))
     .AddStandardResilienceHandler();
-builder.Services.AddHostedService<InitService>();
-builder.Services.AddHostedService<RefreshingSecretService>();
+builder.Services.AddHostedService<InitService>()
+    .AddHostedService<RefreshingSecretService>();
 #endregion
 var app = builder.Build();
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
@@ -67,18 +71,18 @@ logger.LogDebug("The app has been built");
 app.UseExceptionHandler()
     .UseHttpsRedirection()        
     .UseMiddleware<UpdateRequestAuthMiddleware>()        
-    .UseMiddleware<UpdateRequestMappingMiddleware>();        
-#endregion        
-app.MapPost("/bot/update",        
-    async([FromServices] UpdateModelHolder updateModelHolder,
-    [FromServices] ITgUpdateHandler tgUpdateHandler) =>        
-    {
-        await tgUpdateHandler.Handle(updateModelHolder.UpdateModel);        
-        return TypedResults.Ok();        
-    })
-    .AddEndpointFilter<SenderFilter>()
-    .WithName("PostBotUpdate")        
-    .Produces(StatusCodes.Status200OK)        
+    .UseMiddleware<UpdateRequestMappingMiddleware>();
+#endregion
+app.MapPost("/bot/update",            
+    async([FromServices] UpdateModelHolder updateModelHolder,    
+    [FromServices] ITgUpdateHandler tgUpdateHandler) =>            
+    {    
+        await tgUpdateHandler.Handle(updateModelHolder.UpdateModel);            
+        return TypedResults.Ok();            
+    })    
+    .AddEndpointFilter<SenderFilter>()    
+    .WithName("PostBotUpdate")            
+    .Produces(StatusCodes.Status200OK)            
     .ProducesValidationProblem(StatusCodes.Status400BadRequest);
 
 logger.LogDebug("The app is being started");
