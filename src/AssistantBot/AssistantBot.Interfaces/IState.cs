@@ -9,5 +9,5 @@ public interface IState
 
 public interface IStateDependencies 
 {
-    abstract static string DependencyKey { get; }
+    static abstract string DependencyKey { get; }
 }

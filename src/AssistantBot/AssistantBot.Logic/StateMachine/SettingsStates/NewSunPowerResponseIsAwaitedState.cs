@@ -12,7 +12,7 @@ internal class NewSunPowerResponseIsAwaitedState : IState
         var requiredPowerReceived = updateModel.CallbackQuery is null
             ? updateModel.Text
             : updateModel.CallbackQuery.Data;
-        requiredPowerReceived = requiredPowerReceived is null ? "null" : requiredPowerReceived;
+        requiredPowerReceived ??= "null";
         
         if (!byte.TryParse(requiredPowerReceived, out var parsedPowerRequired))
             return dependencies.TgBotClient.SendTextMessageAsync(

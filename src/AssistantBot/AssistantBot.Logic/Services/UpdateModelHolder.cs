@@ -4,7 +4,7 @@ namespace AssistantBot.Logic.Services;
 
 public class UpdateModelHolder
 {
-    public UpdateModel UpdateModel { get; set; } = new UpdateModel() 
+    public UpdateModel UpdateModel { get; set; } = new() 
     {
         ChatId = 0,
         Command = null,

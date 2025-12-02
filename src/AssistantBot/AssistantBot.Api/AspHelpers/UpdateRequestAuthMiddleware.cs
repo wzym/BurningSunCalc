@@ -1,8 +1,7 @@
 ﻿using AssistantBot.Interfaces;
-using System.Reflection.PortableExecutable;
-using TgBotAbstractions;
+using AssistantBot.Logic;
 
-namespace AssistantBot.AspHelpers;
+namespace AssistantBot.Api.AspHelpers;
 
 internal class UpdateRequestAuthMiddleware : IMiddleware
 {
@@ -22,7 +21,6 @@ internal class UpdateRequestAuthMiddleware : IMiddleware
         {
             using var reader = new StreamReader(context.Request.Body);
             var requestBody = await reader.ReadToEndAsync();
-            var headers = context.Request.Headers;
 
             _logger.LogInformation("An update Request with wrong secret token received: {Body}, {@Headers}",
                 requestBody, context.Request.Headers);

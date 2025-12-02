@@ -4,12 +4,7 @@ namespace AssistantBot.Logic.Services;
 
 public class TgBotSecretTokenProvider : ITgBotSecretTokenProvider
 {
-    public string Get { get; private set; }
-
-    public TgBotSecretTokenProvider()
-    {
-        Get = GenerateNew();
-    }
+    public string Get { get; private set; } = GenerateNew();
 
     public void Update() => Get = GenerateNew();
 

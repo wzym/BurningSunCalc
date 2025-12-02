@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using System.Net;
 using System.Text.Json;
-using TgBotAbstractions;
+using AssistantBot.Logic;
 
 namespace IntegrationTests;
 
@@ -27,7 +27,7 @@ public class BurningSunCalcFlowTests
     [Fact]
     public async Task ProcessesFullBurningSunFlowCorrectly()
     {
-        using var factory = new CustomWebAppliucationFactory<Program>()
+        await using var factory = new CustomWebAppliucationFactory<Program>()
             .WithWebHostBuilder(b => b.ConfigureTestServices(s =>
             {
                 _secretTokenProviderMock.ReplaceTokenProviderDependency(s);

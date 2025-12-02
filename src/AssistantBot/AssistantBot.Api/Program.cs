@@ -1,5 +1,4 @@
 using AssistantBot.Api.AspHelpers;
-using AssistantBot.AspHelpers;
 using AssistantBot.Interfaces;
 using AssistantBot.Logic;
 using AssistantBot.Logic.Services;
@@ -70,7 +69,7 @@ logger.LogDebug("The app has been built");
 #region Middlewares        
 app.UseExceptionHandler()
     .UseHttpsRedirection()        
-    .UseMiddleware<UpdateRequestAuthMiddleware>()        
+    .UseMiddleware<UpdateRequestAuthMiddleware>()
     .UseMiddleware<UpdateRequestMappingMiddleware>();
 #endregion
 app.MapPost("/bot/update",            
@@ -79,11 +78,11 @@ app.MapPost("/bot/update",
     {    
         await tgUpdateHandler.Handle(updateModelHolder.UpdateModel);            
         return TypedResults.Ok();            
-    })    
+    })
     .AddEndpointFilter<SenderFilter>()    
     .WithName("PostBotUpdate")            
     .Produces(StatusCodes.Status200OK)            
-    .ProducesValidationProblem(StatusCodes.Status400BadRequest);
+    .ProducesValidationProblem();
 
 logger.LogDebug("The app is being started");
 app.Run();

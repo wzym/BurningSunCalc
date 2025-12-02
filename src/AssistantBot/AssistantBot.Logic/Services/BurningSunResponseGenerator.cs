@@ -6,10 +6,6 @@ namespace AssistantBot.Logic.Services;
 
 public class BurningSunResponseGenerator : IBurningSunResponseGenerator
 {
-    public BurningSunResponseGenerator()
-    {
-    }
-
     public string Get(BurningSunRequest burningSunRequest)
     {
         var datesProcessed = Enumerable

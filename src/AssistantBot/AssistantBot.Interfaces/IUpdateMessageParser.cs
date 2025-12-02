@@ -11,7 +11,7 @@ public abstract class GenericUpdateMessageParser<TInnerUpdate> : IUpdateMessageP
 {
     private readonly ICommandsDispatcher _commandsDispatcher;
 
-    public GenericUpdateMessageParser(ICommandsDispatcher commandsDispatcher)
+    protected GenericUpdateMessageParser(ICommandsDispatcher commandsDispatcher)
     {
         _commandsDispatcher = commandsDispatcher;
     }
@@ -25,7 +25,7 @@ public abstract class GenericUpdateMessageParser<TInnerUpdate> : IUpdateMessageP
 
         if (stringInput[0] != '/') return new() { IsCommand = false, Text = stringInput.ToString() };
 
-        var (cmdString, paramsString) = GenericUpdateMessageParser<TInnerUpdate>.ExtractCommandAndParameters(stringInput[1..]);
+        var (cmdString, paramsString) = ExtractCommandAndParameters(stringInput[1..]);
 
         return new ExtractedCommand 
         {
