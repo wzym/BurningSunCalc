@@ -1,6 +1,8 @@
 ﻿using AssistantBot.Types;
 using Microsoft.AspNetCore.Diagnostics;
 
+namespace AssistantBot.Api.AspHelpers;
+
 internal class CustomExceptionHandler : IExceptionHandler
 {
     private readonly ILogger<CustomExceptionHandler> _logger;

@@ -26,10 +26,9 @@ public readonly struct BanknoteDenomination : IParsable<BanknoteDenomination>
 
     public static BanknoteDenomination Parse(string s, IFormatProvider? provider)
     {
-        if (TryParse(s, provider, out var parsedResult))
-            return parsedResult;
-
-        throw new ArgumentException($"Unable to parse a {nameof(BanknoteDenomination)}");
+        return TryParse(s, provider, out var parsedResult)
+            ? parsedResult 
+            : throw new ArgumentException($"Unable to parse a {nameof(BanknoteDenomination)}");
     }
 
     public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out BanknoteDenomination result)

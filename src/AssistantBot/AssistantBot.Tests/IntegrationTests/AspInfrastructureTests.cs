@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using System.Text.Json;
+using AssistantBot.Logic;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using TgBotAbstractions;
 
 namespace IntegrationTests;
 
@@ -24,7 +24,7 @@ public class AspInfrastructureTests
         var messageText = _faker.Random.String2(3, 100);
         var tgUpdateHandlerMock = Substitute.For<ITgUpdateHandler>();
 
-        using var factory = new CustomWebAppliucationFactory<Program>()
+        await using var factory = new CustomWebAppliucationFactory<Program>()
             .WithWebHostBuilder(b => b.ConfigureTestServices(s => 
             {
                 Replace<ITgUpdateHandler, ITgUpdateHandler>(s, tgUpdateHandlerMock);

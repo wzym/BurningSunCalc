@@ -1,4 +1,4 @@
-﻿namespace TgBotAbstractions;
+﻿namespace AssistantBot.Logic;
 
 public static class Constants
 {

@@ -8,16 +8,16 @@ namespace AssistantBot.Tests.IntegrationTests.MockHelpers;
 internal class SecretTokenProviderMockHelper
 {
     private readonly Faker _faker = new();
-    private readonly ITgBotSecretTokenProvider _botSecretProviderMock;
 
-    internal ITgBotSecretTokenProvider MockInstance => _botSecretProviderMock;
+    private ITgBotSecretTokenProvider MockInstance { get; }
+
     internal string SecretTokenRnd { get; }
 
     internal SecretTokenProviderMockHelper()
     {
         SecretTokenRnd = _faker.Random.String2(3, 20);
-        _botSecretProviderMock = Substitute.For<ITgBotSecretTokenProvider>();
-        _botSecretProviderMock.Get.Returns(SecretTokenRnd);
+        MockInstance = Substitute.For<ITgBotSecretTokenProvider>();
+        MockInstance.Get.Returns(SecretTokenRnd);
     }
 
     internal void ReplaceTokenProviderDependency(IServiceCollection serviceDescriptors)
@@ -25,6 +25,6 @@ internal class SecretTokenProviderMockHelper
         var tgBotSecretTokenProviderDescriptor = serviceDescriptors
             .Single(d => d.ServiceType == typeof(ITgBotSecretTokenProvider));
         serviceDescriptors.Remove(tgBotSecretTokenProviderDescriptor);
-        serviceDescriptors.AddSingleton(_botSecretProviderMock);
+        serviceDescriptors.AddSingleton(MockInstance);
     }
 }
