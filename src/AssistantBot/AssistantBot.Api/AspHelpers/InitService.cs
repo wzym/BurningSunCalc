@@ -1,5 +1,6 @@
 ﻿
 using AssistantBot.Interfaces;
+using AssistantBot.Logic.StateMachine.OtherStates;
 
 namespace AssistantBot.Api.AspHelpers;
 
@@ -11,12 +12,14 @@ internal class InitService : IHostedService
     private readonly ITgBotClient _tgBotClient;
     private readonly ISuffMiddleageFortuneTeller _suffMiddleageFortuneTeller;
     private readonly IIdentifierManager _identifierManager;
+    private readonly AdventuresNamesKeeper _adventuresNamesKeeper;
 
     public InitService(ILogger<InitService> logger, ITgBotWebHookConnector webHookConnector,
         ICommandsDispatcher commandsDispatcher, 
         ITgBotClient tgBotClient,
         ISuffMiddleageFortuneTeller suffMiddleageFortuneTeller,
-        IIdentifierManager identifierManager)
+        IIdentifierManager identifierManager,
+        AdventuresNamesKeeper adventuresNamesKeeper)
     {
         _logger = logger;
         _webHookConnector = webHookConnector;
@@ -24,6 +27,7 @@ internal class InitService : IHostedService
         _tgBotClient = tgBotClient;
         _suffMiddleageFortuneTeller = suffMiddleageFortuneTeller;
         _identifierManager = identifierManager;
+        _adventuresNamesKeeper = adventuresNamesKeeper;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -32,6 +36,7 @@ internal class InitService : IHostedService
 
         await _suffMiddleageFortuneTeller.InitAsync();
         await _identifierManager.InitAsync();
+        await _adventuresNamesKeeper.InitAsync();
 
         var registeredCommands = _commandsDispatcher.RegisteredCommands;
         await _tgBotClient.SetCommands(registeredCommands);

@@ -1,5 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <PropertyGroup>
+    <UserSecretsId>19d62bca-8ab1-47b6-b505-083c87034a6f</UserSecretsId>
+  </PropertyGroup>
+
   <ItemGroup>
     <InternalsVisibleTo Include="AssistantBot.Tests" />
   </ItemGroup>
