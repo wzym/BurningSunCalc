@@ -50,6 +50,7 @@ public class TgUpdateHandler : ITgUpdateHandler
             AssistantBotCommand.SetupSunAngle => new SunAngleChangeRequestedState(),
             AssistantBotCommand.GetSufferingPrediction => new DivinationRequestedState(),
             AssistantBotCommand.CalculateTips => new TipsCalcBaseState(),
+            AssistantBotCommand.GetAdventure => new GetAdventureState(),
             _ => GetStateForUnintendedCmd(updateModel.Command),
         };
 

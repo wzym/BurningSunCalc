@@ -1,21 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
-    <PackageReference Include="Telegram.Bot" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+		<PackageReference Include="Telegram.Bot" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\AstroCalc\BurningSunCalc.AstroCalc\BurningSunCalc.AstroCalc.csproj" />
-    <ProjectReference Include="..\AssistantBot.Interfaces\AssistantBot.Interfaces.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\AstroCalc\BurningSunCalc.AstroCalc\BurningSunCalc.AstroCalc.csproj" />
+		<ProjectReference Include="..\AssistantBot.Interfaces\AssistantBot.Interfaces.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-	  <ContentWithTargetPath Include="StateMachine\Divination\SuffMiddleAge\predictions_set_1.txt">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		  <TargetPath>predictions_set_1.txt</TargetPath>
-	  </ContentWithTargetPath>
-	  <None Include="StateMachine\Divination\SuffMiddleAge\predictions_set_1.txt" />
-  </ItemGroup>
+	<ItemGroup>
+		<ContentWithTargetPath Include="StateMachine\Divination\SuffMiddleAge\predictions_set_1.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>predictions_set_1.txt</TargetPath>
+		</ContentWithTargetPath>
+		<None Include="StateMachine\Divination\SuffMiddleAge\predictions_set_1.txt" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ContentWithTargetPath Include="StateMachine\OtherStates\adventures_names.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>adventures_names.json</TargetPath>
+		</ContentWithTargetPath>
+		<None Include="StateMachine\OtherStates\adventures_names.json" />
+	</ItemGroup>
 
 </Project>

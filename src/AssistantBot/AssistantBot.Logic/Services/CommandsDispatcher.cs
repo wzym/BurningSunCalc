@@ -49,6 +49,7 @@ public class CommandsDispatcher : ICommandsDispatcher
             AssistantBotCommand.SmthElse => "another request example",
             AssistantBotCommand.GetSufferingPrediction => "Гадание по календарю Страдающего средневековья",
             AssistantBotCommand.CalculateTips => "Считает чаевые с разменом",
+            AssistantBotCommand.GetAdventure => "Даёт название приключения на сегодня",
             _ => throw new ArgumentOutOfRangeException(nameof(command), command, null)
         };
     
